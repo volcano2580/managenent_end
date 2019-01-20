@@ -16,7 +16,8 @@ import axios from 'axios'
 
 // 把axios绑定给vue原型
 Vue.prototype.axios = axios
-
+axios.defaults.baseURL = 'http://webapi.test.sheysoftware.cn'
+axios.defaults.headers= {'Content-Type':'application/x-www-form-urlencoded'};
 
 // 安装elementui插件
 Vue.use(ElementUI)

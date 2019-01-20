@@ -104,9 +104,7 @@ export default {
              PassWord:this.form.password
           
         })
-          // 发送ajax请求,进行登录
-          let res = await this.axios.post('/Api/MerchantAccount/MerchantLogin',{
-            params: qs.stringify({
+        let data = qs.stringify({
               AppTerminal:"pc",
               AppParam:params,
               AppSign:'',
@@ -114,6 +112,10 @@ export default {
               AppTimeStamp:"",
 
             })
+            console.log(data);
+          // 发送ajax请求,进行登录
+          let res = await this.axios.post('/Api/MerchantAccount/MerchantLogin',{
+            params: data
           })
             console.log(res.data)
           if(res.data.Code === 0){
