@@ -43,22 +43,22 @@ export default {
       rules: {
         username: [
           // 非空校验
-          { required: true, message: '用户名不能为空', trigger: 'change' },
+          { required: true, message: '用户名不能为空', trigger: 'blur' },
           {
             min: 4,
-            max: 10,
-            message: '用户名长度在 4 到 10 个字符',
-            trigger: 'change'
+            max: 11,
+            message: '用户名长度在 4 到 11 个字符',
+            trigger: 'blur'
           }
         ],
         password: [
           // 非空校验
-          { required: true, message: '密码不能为空', trigger: 'change' },
+          { required: true, message: '密码不能为空', trigger: 'blur' },
           {
             min: 6,
             max: 12,
             message: '用户名长度在 6 到 12 个字符',
-            trigger: 'change'
+            trigger: 'blur'
           }
         ]
       },
@@ -98,39 +98,34 @@ export default {
       this.$refs.form.validate(async valid => {
         // valid如果为true,就表示通过,否则不通过
         if (!valid) return false
+         let qs = require('qs')
+          let params = JSON.stringify({
+             MerchantAccount:this.form.username,
+             PassWord:this.form.password
+          
+        })
           // 发送ajax请求,进行登录
           let res = await this.axios.post('/Api/MerchantAccount/MerchantLogin',{
-            params:{
+            params: qs.stringify({
               AppTerminal:"pc",
-              AppParam:{
-                MerchantAccount:this.username,
-                PassWord:this.password
-              },
+              AppParam:params,
               AppSign:'',
+              AppEcrypt:"none",
               AppTimeStamp:"",
-              AppEcrypt:"none"
 
-            }
+            })
           })
-          console.log(res.data)
-          // let {meta:{status,msg},data:{token}} = res
-          // if(status === 200){
-            // 跳转到主页
-            // 参数:跳转的页面
-          //   this.$router.push('/home')
-          //   // 把后台颁发的token存起来
-          //   localStorage.setItem('token',res.data.token)
-          //   // alert('登录成功')
-          //   this.$message.success('登录成功')
-          // }else{
-          //   // 失败的消息 this.$message:弹出一个消息框
-          //   this.$message({
-          //     message:msg,
-          //     type:'error',
-          //     duration:1000
-          //   })
+            console.log(res.data)
+          if(res.data.Code === 0){
+            
+            this.$router.push('/seller')
+            // localStorage.setItem('token',res.data.token)
+            this.$message.success('登录成功')
+          }else{
+            // 失败的消息 this.$message:弹出一个消息框
+            this.$message.error('登录失败')
 
-          // }
+          }
       })
     }
       

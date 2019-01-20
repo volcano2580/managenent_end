@@ -59,23 +59,23 @@ export default {
         //   注册表单校验
        rules: {
           mobile: [
-            {  pattern: /^1\d{10}$/, message: '请输入合法的手机号码', trigger: 'change' },
+            {  pattern: /^1\d{10}$/, message: '请输入合法的手机号码', trigger: 'blur' },
 
           ],
           username: [
-            { required: true, message: '请输入用户名', trigger: 'change' },
-            { min: 3, max: 9, message: '长度在 3 到 9个字符', trigger: 'change' }
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+            { min: 3, max: 9, message: '长度在 3 到 9个字符', trigger: 'blur' }
           ],
           password: [
-            { required: true, message: '请输入正确密码格式', trigger: 'change' },
-            { min: 6, max: 12, message: '长度在6 到 12 个字符', trigger: 'change' }
+            { required: true, message: '请输入正确密码格式', trigger: 'blur' },
+            { min: 6, max: 12, message: '长度在6 到 12 个字符', trigger: 'blur' }
           ],
           relate :[
-            { required: true, message: '请输入qq或微信', trigger: 'change' },
+            { required: true, message: '请输入qq或微信', trigger: 'blur' },
             
           ],
           recomd:[
-             { required: true, message: '请输入邀请码', trigger: 'change' },
+             { required: true, message: '请输入邀请码', trigger: 'blur' },
           ]
        },
         }
@@ -103,15 +103,15 @@ export default {
           let qs = require('qs');
           let params=JSON.stringify({
            SendPhone:this.registerForm.mobile,
-           SendType:this.SendType
+           SendType:8
            });
-         let res = await this.post('/Api/AccountMSM/SendAccountMSM',{
+         let res = await this.axios.post('/Api/AccountMSM/SendAccountMSM',{
            params:qs.stringify({
             AppTerminal:"pc",
             AppParam:params,
             AppSign:"",
             AppEcrypt:"none",
-            AppTimeStamp:"",
+            AppTimeStamp:""
            }), 
          }).then(res=>{
           console.log(res.data)
@@ -142,9 +142,15 @@ export default {
             AppEcrypt:"none",
             AppTimeStamp:"",
            }), 
-        }).then(res=>{
+        })
           console.log(res.data)
-        })    
+      
+        if(res.data.code === 0){
+          this.$router.push('/seller')
+          this.$message.success('注册成功')
+        }else{
+
+        }this.$message.error('注册失败')
         });
       },
    
